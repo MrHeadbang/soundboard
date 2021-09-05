@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.media.MediaMetadataRetriever;
@@ -59,6 +60,7 @@ public class soundCut extends Fragment {
     private TextView cut_left_time, cut_right_time, cut_path, play_text;
     private float milliSeconds, seconds, left_time, right_time;
     private ImageView play_image;
+    private boolean play_switcher = true;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,9 +90,17 @@ public class soundCut extends Fragment {
         cut_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mediaPlayer.stop();
-                List<Float> slider_values = slider.getValues();
-                playCuts(left_time, right_time, uri);
+                if(play_switcher) {
+                    playCuts(left_time, right_time, uri);
+                    play_image.setImageResource(R.drawable.ic_baseline_stop_24);
+                    play_text.setText("Stop");
+                    play_switcher = false;
+                } else {
+                    mediaPlayer.stop();
+                    play_image.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+                    play_text.setText("Play");
+                    play_switcher = true;
+                }
             }
         });
         //Toast.makeText(getActivity(), slider.getValues().get(0).toString(), Toast.LENGTH_LONG).show();

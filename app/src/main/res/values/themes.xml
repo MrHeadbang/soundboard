@@ -1,0 +1,11 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Cstmsndbrd" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/primaryAccent</item>
+        <item name="android:statusBarColor">@color/primary</item>
+        <item name="android:textColorPrimary">@color/primaryAccent</item>
+        <item name="colorControlHighlight">@color/primaryAccent</item>
+    </style>
+</resources>

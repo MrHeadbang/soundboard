@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/primary"
+    android:orientation="vertical"
+    android:padding="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryAccent"
+            android:text="File"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cut_path"
+            android:textColor="@color/primaryAccent"/>
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primaryAccent"
+        android:text="Minutes / Seconds"
+        android:textStyle="bold"/>
+
+    <com.google.android.material.slider.RangeSlider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/slider_multiple_thumbs"
+        android:valueFrom="0"
+        android:valueTo="10"
+        android:background="@color/primary"
+        app:trackColor="@color/primaryAccent"
+        app:thumbColor="@color/primaryAccent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primaryAccent"
+        android:text="Milliseconds"
+        android:textStyle="bold"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.slider.RangeSlider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/slider_milli_left"
+            android:valueFrom="0"
+            android:valueTo="999"
+            android:background="@color/primary"
+            app:trackColor="@color/primaryAccent"
+            app:thumbColor="@color/primaryAccent"
+            android:layout_weight="1"
+            android:stepSize="1"/>
+
+        <com.google.android.material.slider.RangeSlider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/slider_milli_right"
+            android:valueFrom="0"
+            android:valueTo="999"
+            android:background="@color/primary"
+            app:trackColor="@color/primaryAccent"
+            app:thumbColor="@color/primaryAccent"
+            android:layout_weight="1"
+            android:stepSize="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/primaryAccent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/cut_left_time"
+            android:hint="0"
+            android:maxLines="1" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cut_play"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:foreground="?selectableItemBackground"
+            android:clickable="true">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:tint="@color/primaryAccent"
+                android:id="@+id/play_image"
+                android:src="@drawable/ic_baseline_play_arrow_24"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryAccent"
+                android:textStyle="bold"
+                android:id="@+id/play_text"
+                android:text="Play"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/primaryAccent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/cut_right_time"
+            android:hint="0"
+            android:maxLines="1" />
+
+    </LinearLayout>
+
+</LinearLayout>

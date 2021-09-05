@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:foreground="?selectableItemBackground"
+    android:clickable="true"
+    android:id="@+id/main_recyclerview_item_card"
+    app:cardCornerRadius="5dp"
+    android:layout_margin="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/primary"
+        android:id="@+id/main_recyclerview_item_layout"
+        android:padding="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        app:cardCornerRadius="27dp"
+        app:cardPreventCornerOverlap="false">
+        <androidx.cardview.widget.CardView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="24dp"
+            app:cardPreventCornerOverlap="false"
+            android:layout_gravity="center">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:id="@+id/main_recyclerview_item_image"
+                android:layout_gravity="center"/>
+        </androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lorem Ipsum"
+        android:textColor="@color/primaryAccent"
+        android:textStyle="bold"
+        android:textSize="14dp"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/main_recyclerview_item_name"
+        android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

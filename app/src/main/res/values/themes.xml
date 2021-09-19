@@ -8,4 +8,11 @@
         <item name="android:textColorPrimary">@color/primaryAccent</item>
         <item name="colorControlHighlight">@color/primaryAccent</item>
     </style>
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/primaryAccent</item>
+        <item name="android:textColor">@color/primaryAccent</item>
+        <item name="android:textColorPrimary">@color/primaryAccent</item>
+        <item name="android:background">@color/primary</item>
+    </style>
+
 </resources>

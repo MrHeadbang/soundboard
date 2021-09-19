@@ -13,6 +13,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
@@ -56,7 +57,7 @@ public class soundCut extends Fragment {
     private String audioPath = "";
     private RangeSlider slider, slider_milli_left, slider_milli_right;
     private MediaPlayer mediaPlayer;
-    private LinearLayout cut_play;
+    private LinearLayout cut_play, cut_sound;
     private TextView cut_left_time, cut_right_time, cut_path, play_text;
     private float milliSeconds, seconds, left_time, right_time;
     private ImageView play_image;
@@ -73,6 +74,7 @@ public class soundCut extends Fragment {
         cut_right_time = view.findViewById(R.id.cut_right_time);
         slider_milli_left = view.findViewById(R.id.slider_milli_left);
         slider_milli_right = view.findViewById(R.id.slider_milli_right);
+        cut_sound = view.findViewById(R.id.cut_sound);
         play_text = view.findViewById(R.id.play_text);
         cut_path = view.findViewById(R.id.cut_path);
         play_image = view.findViewById(R.id.play_image);
@@ -86,6 +88,10 @@ public class soundCut extends Fragment {
         seconds = milliSeconds / 1000;
         setSliderSpecs();
         setSeconds();
+
+
+
+
 
         cut_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +129,26 @@ public class soundCut extends Fragment {
                 setSeconds();
             }
         });
+
+        cut_sound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    File mp3File = FileUtils.getFileFromUri(getActivity(), uri);
+                    String mp3FilePath = mp3File.getAbsolutePath();
+                    Mp3Cutter mp3Cutter = new Mp3Cutter(getActivity());
+                    List<Float> slider_values = slider.getValues();
+                    mp3Cutter.mp3FilePath = mp3FilePath;
+                    mp3Cutter.start = slider_values.get(0) + slider_milli_left.getValues().get(0) / 1000;
+                    mp3Cutter.end = slider_values.get(1) + slider_milli_right.getValues().get(0) / 1000;
+                    mp3Cutter.outputPath = "/storage/emulated/0/Music/test.mp3";
+                    mp3Cutter.cut();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
         return view;
     }

@@ -15,10 +15,8 @@ import com.arthenica.mobileffmpeg.FFmpeg;
 
 import java.io.File;
 
-//ffmpeg -i nena.mp3 -ss 20 -to 40 -c copy test.mp3
 public class Mp3Cutter {
     public Context context;
-    //public String mp3FilePath;
     public float start;
     public float end;
     public String mp3FilePath;

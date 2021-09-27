@@ -60,7 +60,7 @@ public class mainFragment extends Fragment {
             new_soundboard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    globals.setFragment(getActivity(), new soundboardEditFragment(), "soundboardEditFragment");
+                    globals.setFragment(getActivity(), new soundboardNewFragment(), "soundboardNewFragment");
                 }
             });
         } catch (Exception e) {

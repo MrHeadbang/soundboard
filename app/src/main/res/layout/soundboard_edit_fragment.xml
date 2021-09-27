@@ -13,7 +13,8 @@
         android:gravity="center"
         android:id="@+id/soundboard_edit_addsound"
         android:foreground="?selectableItemBackground"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"

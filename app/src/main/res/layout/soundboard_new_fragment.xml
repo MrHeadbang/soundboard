@@ -29,6 +29,7 @@
                 <ImageView
                     android:src="@drawable/ic_baseline_add_24"
                     android:scaleType="center"
+                    android:id="@+id/new_soundboard_image"
                     android:foreground="?selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"

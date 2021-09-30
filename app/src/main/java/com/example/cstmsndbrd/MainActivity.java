@@ -27,9 +27,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Custom Soundboard");
+        setSupportActionBar(toolbar);
         globals.setFragment(MainActivity.this, new mainFragment(), "mainFragment");
     }
 }

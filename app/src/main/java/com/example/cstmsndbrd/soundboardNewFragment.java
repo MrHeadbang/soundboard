@@ -19,6 +19,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.BinderThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -27,6 +28,7 @@ public class soundboardNewFragment extends Fragment {
 
     private ImageView new_soundboard_image;
     private globals globals = new globals();
+    private Bitmap cropped = null;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,12 +43,10 @@ public class soundboardNewFragment extends Fragment {
                             assert result.getData() != null;
                             Uri selectedImageUri = result.getData().getData();
                             if (null != selectedImageUri) {
-                                //new_soundboard_image.setImageTintMode(null);
-                                //new_soundboard_image.setScaleType(ImageView.ScaleType.FIT_XY);
-                                //new_soundboard_image.setImageURI(selectedImageUri);
                                 Bundle bundle = new Bundle();
                                 bundle.putString("image_uri", selectedImageUri.toString());
                                 Fragment imageCrop = new ImageCrop();
+                                imageCrop.setTargetFragment(soundboardNewFragment.this, 200);
                                 imageCrop.setArguments(bundle);
                                 globals.setFragment(getContext(), imageCrop, "ImageCrop");
                             }
@@ -65,4 +65,19 @@ public class soundboardNewFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 201) {
+            if (requestCode== 200){
+                assert data != null;
+                byte[] byteArray = data.getByteArrayExtra("cropped");
+                cropped = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                new_soundboard_image.setImageTintMode(null);
+                new_soundboard_image.setScaleType(ImageView.ScaleType.FIT_XY);
+                new_soundboard_image.setImageBitmap(cropped);
+            }
+        }
+
+    }
 }

@@ -2,6 +2,7 @@ package com.example.cstmsndbrd;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 public class ImageCrop extends Fragment {
@@ -47,14 +49,21 @@ public class ImageCrop extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    @SuppressLint("NonConstantResourceId")
+    @SuppressLint({"NonConstantResourceId", "WrongThread"})
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.image_crop_done) {
             Bitmap cropped = cropImageView.getCroppedImage();
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            cropped.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
 
-            getActivity().getSupportFragmentManager().popBackStack();
+            Intent intent = new Intent(getActivity(), ImageCrop.class);
+            intent.putExtra("cropped", byteArray);
+
+            getTargetFragment().onActivityResult(getTargetRequestCode(), 201, intent);
+            requireActivity().getSupportFragmentManager().popBackStack();
         }
         return super.onOptionsItemSelected(item);
     }

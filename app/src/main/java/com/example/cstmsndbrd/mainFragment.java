@@ -38,7 +38,7 @@ public class mainFragment extends Fragment {
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         mainRecyclerView = view.findViewById(R.id.main_recyclerview);
         new_soundboard = view.findViewById(R.id.new_soundboard);
-        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(Objects.requireNonNull(getActivity()), DividerItemDecoration.VERTICAL);
+        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(requireActivity(), DividerItemDecoration.VERTICAL);
         mainRecyclerView.addItemDecoration(itemDecoration);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         mainRecyclerView.setLayoutManager(linearLayoutManager);

@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/primary"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp">
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -60,6 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
+            android:id="@+id/new_soundboard_name"
             android:backgroundTint="@color/primaryAccent"
             android:textColor="@color/primaryAccent"
             android:layout_marginBottom="20dp"/>
@@ -76,8 +78,34 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/primaryAccent"
             android:textColor="@color/primaryAccent"
+            android:id="@+id/new_soundboard_desc"
             android:inputType="textMultiLine"
             android:layout_marginBottom="20dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:id="@+id/new_soundboard_create"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:foreground="?selectableItemBackground"
+        android:clickable="true">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:tint="@color/primaryAccent"
+            android:src="@drawable/ic_baseline_create_new_folder_24"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create"
+            android:textColor="@color/primaryAccent"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 

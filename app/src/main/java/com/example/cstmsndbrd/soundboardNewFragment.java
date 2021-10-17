@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -24,9 +26,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONException;
+
+import java.io.IOException;
+
 public class soundboardNewFragment extends Fragment {
 
     private ImageView new_soundboard_image;
+    private EditText new_soundboard_name, new_soundboard_desc;
+    private LinearLayout new_soundboard_create;
     private globals globals = new globals();
     private Bitmap cropped = null;
     @Nullable
@@ -34,6 +44,10 @@ public class soundboardNewFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.soundboard_new_fragment, container, false);
         new_soundboard_image = view.findViewById(R.id.new_soundboard_image);
+        new_soundboard_name = view.findViewById(R.id.new_soundboard_name);
+        new_soundboard_desc = view.findViewById(R.id.new_soundboard_desc);
+        new_soundboard_create = view.findViewById(R.id.new_soundboard_create);
+
         ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -62,6 +76,27 @@ public class soundboardNewFragment extends Fragment {
                 mLauncher.launch(i);
             }
         });
+
+
+        new_soundboard_create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FileManager fileManager = new FileManager(getContext(), null);
+                if(new_soundboard_name.getText().toString().equals("")) {
+                    Snackbar.make(view, "Name can't be empty!", Snackbar.LENGTH_LONG).show();
+                    return;
+                }/*
+                try {
+                    fileManager.setName(new_soundboard_name.getText().toString());
+                    fileManager.setDescription(new_soundboard_desc.getText().toString());
+                    fileManager.setImage(cropped);
+                } catch (JSONException | IOException e) {
+                    e.printStackTrace();
+                }*/
+
+            }
+        });
+
         return view;
     }
 

@@ -55,6 +55,8 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
         File file = new File(boardPath + "/config.json");
         StringBuilder text = new StringBuilder();
 
+        FileManager fileManager = new FileManager(context, boardPath);
+
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;

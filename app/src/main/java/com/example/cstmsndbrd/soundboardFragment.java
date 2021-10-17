@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,8 +34,8 @@ public class soundboardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.soundboard_fragment, container, false);
         soundboard_headline = view.findViewById(R.id.soundboard_headline);
-        soundboard_desc = view.findViewById(R.id.soundboard_desc);
-        soundboard_image = view.findViewById(R.id.soundboard_image);
+
+
         soundboard_recyclerview = view.findViewById(R.id.soundboard_recyclerview);
         soundboard_recyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         Bundle args = getArguments();
@@ -43,6 +45,7 @@ public class soundboardFragment extends Fragment {
         String boardImagePath = "";
         String boardDesc = "";
         String boardPath = args.getString("path");
+
         try {
             configObject = new JSONObject(args.getString("config"));
             boardName = configObject.getString("boardName");

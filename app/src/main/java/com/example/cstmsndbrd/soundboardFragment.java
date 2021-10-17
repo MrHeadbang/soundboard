@@ -34,8 +34,8 @@ public class soundboardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.soundboard_fragment, container, false);
         soundboard_headline = view.findViewById(R.id.soundboard_headline);
-
-
+        soundboard_desc = view.findViewById(R.id.soundboard_desc);
+        soundboard_image = view.findViewById(R.id.soundboard_image);
         soundboard_recyclerview = view.findViewById(R.id.soundboard_recyclerview);
         soundboard_recyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         Bundle args = getArguments();
@@ -52,12 +52,14 @@ public class soundboardFragment extends Fragment {
             boardImagePath = boardPath + configObject.getString("boardImagePath");
             boardDesc = configObject.getString("boardDesc");
             soundList = configObject.getJSONObject("soundList");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         soundboard_headline.setText(boardName);
         soundboard_desc.setText(boardDesc);
         soundboard_image.setImageBitmap(BitmapFactory.decodeFile(boardImagePath));
+
 
 
         List<List<String>> sounds = new ArrayList<List<String>>();

@@ -28,12 +28,13 @@ public class FileManager {
     private Context context = null;
     public FileManager(Context context, String SOUNDBOARD_PATH) {
         this.context = context;
-        if(SOUNDBOARD_PATH == null)
+        if(SOUNDBOARD_PATH == null) {
             createBody();
+            return;
+        }
 
 
         this.SOUNDBOARD_PATH = SOUNDBOARD_PATH;
-        /*
         this.configFile = new File(this.SOUNDBOARD_PATH + "config.json");
 
 
@@ -54,7 +55,7 @@ public class FileManager {
             this.configObject = new JSONObject(text.toString());
         } catch (JSONException e) {
             e.printStackTrace();
-        }*/
+        }
     }
     private void save() {
         try {
@@ -77,24 +78,32 @@ public class FileManager {
 
         JSONObject output = new JSONObject();
         output.put("Board", jsonData);
-
         return output;
+    }
+
+    private String newPATH(String path, int boardCounter) {
+        return path + "/board" + String.valueOf(boardCounter + 1);
     }
 
     private void createBody() {
         String path = Environment.getExternalStorageDirectory().toString() + "/" + "soundboards";
         File appDirectory = new File(path);
         File[] boardFiles = appDirectory.listFiles();
+        assert boardFiles != null;
         String lastBoard = boardFiles[boardFiles.length - 1].toString();
         int boardCounter = Integer.parseInt(lastBoard.substring(lastBoard.length() - 1));
-        SOUNDBOARD_PATH = path + "/board" + String.valueOf(boardCounter + 1);
+        SOUNDBOARD_PATH = newPATH(path, boardCounter + 1);
+        configFile = new File(SOUNDBOARD_PATH + "/config.json");
+
         File newBoard = new File(SOUNDBOARD_PATH);
         if (!newBoard.exists()) newBoard.mkdir();
         try {
-            Toast.makeText(context, createConfigBody().toString(), Toast.LENGTH_LONG).show();
+            configObject = createConfigBody();
+            save();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
     public void setName(String name) throws JSONException {
@@ -106,6 +115,8 @@ public class FileManager {
         save();
     }
     public void setImage(Bitmap bitmap) throws JSONException, IOException {
+        if(bitmap == null)
+            return;
         String bitmapName = "board.png";
         File outputFile = new File(SOUNDBOARD_PATH + "/" + bitmapName);
         outputFile.createNewFile();

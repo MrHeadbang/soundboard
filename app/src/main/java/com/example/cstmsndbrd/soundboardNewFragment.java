@@ -81,18 +81,20 @@ public class soundboardNewFragment extends Fragment {
         new_soundboard_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FileManager fileManager = new FileManager(getContext(), null);
+
                 if(new_soundboard_name.getText().toString().equals("")) {
                     Snackbar.make(view, "Name can't be empty!", Snackbar.LENGTH_LONG).show();
                     return;
-                }/*
+                }
+                FileManager fileManager = new FileManager(getContext(), null);
                 try {
                     fileManager.setName(new_soundboard_name.getText().toString());
                     fileManager.setDescription(new_soundboard_desc.getText().toString());
                     fileManager.setImage(cropped);
+                    requireActivity().getSupportFragmentManager().popBackStack();
                 } catch (JSONException | IOException e) {
                     e.printStackTrace();
-                }*/
+                }
 
             }
         });

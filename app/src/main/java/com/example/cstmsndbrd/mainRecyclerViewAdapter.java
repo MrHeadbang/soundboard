@@ -1,19 +1,37 @@
 package com.example.cstmsndbrd;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.transition.Transition;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.view.menu.MenuPopupHelper;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -26,8 +44,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
 
 public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerViewAdapter.ViewHolder> {
     Context context;
@@ -47,6 +68,7 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
         return new ViewHolder(view);
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onBindViewHolder(@NonNull mainRecyclerViewAdapter.ViewHolder holder, int position) {
         String boardPath = appDirectoryPath + "/" + boardPaths.get(position);
@@ -101,25 +123,91 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
                 globals.setFragment(context, soundboardFragment, "soundboardFragment");
             }
         });
+        holder.main_recyclerview_item_options.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int[] location = new int[2];
+                view.getLocationOnScreen(location);
+                Point point = new Point();
+                point.x = location[0];
+                point.y = location[1];
+                showStatusPopup(context, point, boardPath, holder.getAdapterPosition());
+            }
+        });
 
 
     }
+    private void showStatusPopup(final Context context, Point p, String boardPath, int position) {
 
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.options_popup, null);
+
+        PopupWindow changeStatusPopUp = new PopupWindow(context);
+        changeStatusPopUp.setContentView(layout);
+        changeStatusPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeStatusPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeStatusPopUp.setAnimationStyle(android.R.style.Animation_Dialog);
+
+        int OFFSET_X = -300;
+        int OFFSET_Y = 50;
+
+        changeStatusPopUp.setOutsideTouchable(true);
+        changeStatusPopUp.setFocusable(true);
+        changeStatusPopUp.setBackgroundDrawable(new BitmapDrawable());
+        changeStatusPopUp.showAtLocation(layout, Gravity.NO_GRAVITY, p.x + OFFSET_X, p.y + OFFSET_Y);
+
+        LinearLayout shareOption = layout.findViewById(R.id.shareOption);
+        LinearLayout deleteOption = layout.findViewById(R.id.deleteOption);
+        FileManager fileManager = new FileManager(context, boardPath);
+        shareOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Shared", Toast.LENGTH_LONG).show();
+                changeStatusPopUp.dismiss();
+
+            }
+        });
+        deleteOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeStatusPopUp.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialog);
+                builder.setTitle("Warning");
+                builder.setIcon(R.drawable.ic_baseline_warning_24);
+                builder.setMessage("All sounds and images will be lost.");
+                builder.setCancelable(true);
+                builder.setNegativeButton("CANCEL", null);
+                builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        fileManager.deleteBoard();
+                        boardPaths.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position,boardPaths.size());
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+
+    }
     @Override
     public int getItemCount() {
         return boardPaths.size();
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView main_recyclerview_item_name;
-        ImageView main_recyclerview_item_image;
-        LinearLayout main_recyclerview_item_layout;
-        CardView main_recyclerview_item_card;
+        private TextView main_recyclerview_item_name;
+        private ImageView main_recyclerview_item_image, main_recyclerview_item_options;
+        private LinearLayout main_recyclerview_item_layout;
+        private CardView main_recyclerview_item_card;
         public ViewHolder(View view) {
             super(view);
             main_recyclerview_item_name = view.findViewById(R.id.main_recyclerview_item_name);
             main_recyclerview_item_image = view.findViewById(R.id.main_recyclerview_item_image);
             main_recyclerview_item_layout = view.findViewById(R.id.main_recyclerview_item_layout);
             main_recyclerview_item_card = view.findViewById(R.id.main_recyclerview_item_card);
+            main_recyclerview_item_options = view.findViewById(R.id.main_recyclerview_item_options);
         }
     }
 }

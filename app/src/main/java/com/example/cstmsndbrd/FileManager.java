@@ -18,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 public class FileManager {
@@ -89,9 +90,11 @@ public class FileManager {
         String path = Environment.getExternalStorageDirectory().toString() + "/" + "soundboards";
         File appDirectory = new File(path);
         File[] boardFiles = appDirectory.listFiles();
-        assert boardFiles != null;
-        String lastBoard = boardFiles[boardFiles.length - 1].toString();
-        int boardCounter = Integer.parseInt(lastBoard.substring(lastBoard.length() - 1));
+        int boardCounter = 0;
+        if(boardFiles.length > 0) {
+            String lastBoard = boardFiles[boardFiles.length - 1].toString();
+            boardCounter = Integer.parseInt(lastBoard.substring(lastBoard.length() - 1));
+        }
         SOUNDBOARD_PATH = newPATH(path, boardCounter + 1);
         configFile = new File(SOUNDBOARD_PATH + "/config.json");
 
@@ -128,7 +131,27 @@ public class FileManager {
         configObject.getJSONObject("Board").put("boardImagePath", bitmapName);
         save();
     }
+    public void deleteBoard() {
+        deleteSubFolders(SOUNDBOARD_PATH);
+        File currentFolder = new File(SOUNDBOARD_PATH);
+        currentFolder.delete();
+    }
+    private void deleteSubFolders(String uri) {
+        File currentFolder = new File(uri);
+        File files[] = currentFolder.listFiles();
 
+        if (files == null) {
+            return;
+        }
+        for (File f : files)
+        {
+            if (f.isDirectory())
+            {
+                deleteSubFolders(f.toString());
+            }
+            f.delete();
+        }
+    }
     public void addSound(File soundFile, Bitmap soundImage, String soundName) {
 
     }

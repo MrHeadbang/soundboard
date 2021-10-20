@@ -7,12 +7,18 @@
         <item name="android:statusBarColor">@color/primary</item>
         <item name="android:textColorPrimary">@color/primaryAccent</item>
         <item name="colorControlHighlight">@color/primaryAccent</item>
+
     </style>
     <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/primaryAccent</item>
         <item name="android:textColor">@color/primaryAccent</item>
         <item name="android:textColorPrimary">@color/primaryAccent</item>
         <item name="android:background">@color/primary</item>
+    </style>
+    <style name="AlertDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:textColor">@color/primaryAccent</item>
+        <item name="android:background">@color/primary</item>
+        <item name="android:tint">@color/primaryAccent</item>
     </style>
 
 </resources>

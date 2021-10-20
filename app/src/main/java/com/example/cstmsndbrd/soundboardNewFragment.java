@@ -53,8 +53,7 @@ public class soundboardNewFragment extends Fragment {
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
-                        if (result != null) {
-                            assert result.getData() != null;
+                        if (result != null && result.getData() != null) {
                             Uri selectedImageUri = result.getData().getData();
                             if (null != selectedImageUri) {
                                 Bundle bundle = new Bundle();
@@ -62,7 +61,7 @@ public class soundboardNewFragment extends Fragment {
                                 Fragment imageCrop = new ImageCrop();
                                 imageCrop.setTargetFragment(soundboardNewFragment.this, 200);
                                 imageCrop.setArguments(bundle);
-                                globals.setFragment(getContext(), imageCrop, "ImageCrop");
+                                globals.setFragment(requireContext(), imageCrop, "ImageCrop");
                             }
                         }
                     }

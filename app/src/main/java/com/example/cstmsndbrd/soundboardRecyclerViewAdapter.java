@@ -1,10 +1,12 @@
 package com.example.cstmsndbrd;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -26,6 +29,7 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
     globals globals = new globals();
     List<List<String>> sounds;
     MediaPlayer mediaPlayer;
+    int FOOTER_VIEW = 1;
     public soundboardRecyclerViewAdapter(Context context, String boardPath, List<List<String>> sounds) {
         this.context = context;
         this.boardPath = boardPath;
@@ -35,41 +39,86 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        if(viewType == FOOTER_VIEW) {
+            View footerView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.sound_add_footer, viewGroup, false);
+            return new Footer(footerView);
+        }
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.soundboard_recyclerview_item, viewGroup, false);
-        return new soundboardRecyclerViewAdapter.ViewHolder(view);
+        return new SoundItem(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull soundboardRecyclerViewAdapter.ViewHolder holder, int position) {
-        int randomColor = globals.randomColor();
-        List<String> params = sounds.get(position);
-        holder.soundboard_item_caption.setText(params.get(0));
-        Bitmap soundBitmap = BitmapFactory.decodeFile(boardPath + params.get(1));
-        if(soundBitmap != null)
-            holder.soundboard_item_image.setImageBitmap(soundBitmap);
-        else
-            holder.soundboard_item_image.setBackgroundColor(randomColor);
-        holder.soundboard_layout.setBackgroundColor(randomColor);
-        holder.soundboard_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mediaPlayer != null)
-                    mediaPlayer.release();
-                mediaPlayer = MediaPlayer.create(context, Uri.parse(boardPath + params.get(2)));
-                mediaPlayer.start();
-            }
-        });
+
+        if(holder instanceof SoundItem) {
+            SoundItem itemHolder = (SoundItem) holder;
+            int randomColor = globals.randomColor();
+            List<String> params = sounds.get(position);
+            itemHolder.soundboard_item_caption.setText(params.get(0));
+            Bitmap soundBitmap = BitmapFactory.decodeFile(boardPath + params.get(1));
+            if (soundBitmap != null)
+                itemHolder.soundboard_item_image.setImageBitmap(soundBitmap);
+            else
+                itemHolder.soundboard_item_image.setBackgroundColor(randomColor);
+            itemHolder.soundboard_layout.setBackgroundColor(randomColor);
+            itemHolder.soundboard_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (mediaPlayer != null)
+                        mediaPlayer.release();
+                    mediaPlayer = MediaPlayer.create(context, Uri.parse(boardPath + params.get(2)));
+                    mediaPlayer.start();
+                }
+            });
+
+
+        } else if(holder instanceof Footer) {
+            Footer itemHolder = (Footer) holder;
+            itemHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("boardPath", boardPath);
+                    soundboardEditFragment soundboardEditFragment = new soundboardEditFragment();
+                    soundboardEditFragment.setArguments(bundle);
+                    globals.setFragment(context, soundboardEditFragment, "soundboardEditFragment");
+                }
+            });
+
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return sounds.size();
+        return sounds.size() + 1;
+    }
+    @Override
+    public int getItemViewType(int position) {
+        if (position == sounds.size()) {
+            return FOOTER_VIEW;
+        }
+        return super.getItemViewType(position);
     }
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        public ViewHolder(View view) {
+            super(view);
+
+        }
+    }
+    public static class Footer extends ViewHolder {
+
+        public Footer(View view) {
+            super(view);
+        }
+    }
+    public static class SoundItem extends ViewHolder {
         LinearLayout soundboard_layout;
         ImageView soundboard_item_image;
         TextView soundboard_item_caption;
-        public ViewHolder(View view) {
+        public SoundItem(View view) {
             super(view);
             soundboard_layout = view.findViewById(R.id.soundboard_layout);
             soundboard_item_image = view.findViewById(R.id.soundboard_item_image);

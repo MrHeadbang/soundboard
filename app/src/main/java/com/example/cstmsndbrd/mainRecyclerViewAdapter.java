@@ -162,8 +162,8 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
         shareOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "Shared", Toast.LENGTH_LONG).show();
                 changeStatusPopUp.dismiss();
+                
 
             }
         });

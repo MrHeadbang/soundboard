@@ -52,9 +52,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class soundCut extends Fragment {
-    private String audioPath = "";
+    private String audioPath = "", boardPath = "";
     private RangeSlider slider, slider_milli_left, slider_milli_right;
     private MediaPlayer mediaPlayer;
     private LinearLayout cut_play, cut_sound;
@@ -68,6 +69,7 @@ public class soundCut extends Fragment {
         View view = inflater.inflate(R.layout.sound_cut, container, false);
         Bundle args = getArguments();
         audioPath = args.getString("audioUri");
+        boardPath = args.getString("boardPath");
         slider = view.findViewById(R.id.slider_multiple_thumbs);
         cut_play = view.findViewById(R.id.cut_play);
         cut_left_time = view.findViewById(R.id.cut_left_time);
@@ -129,11 +131,11 @@ public class soundCut extends Fragment {
                 setSeconds();
             }
         });
-
         cut_sound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
+                    mediaPlayer.stop();
                     File mp3File = FileUtils.getFileFromUri(getActivity(), uri);
                     String mp3FilePath = mp3File.getAbsolutePath();
                     Mp3Cutter mp3Cutter = new Mp3Cutter(getActivity());
@@ -141,8 +143,15 @@ public class soundCut extends Fragment {
                     mp3Cutter.mp3FilePath = mp3FilePath;
                     mp3Cutter.start = slider_values.get(0) + slider_milli_left.getValues().get(0) / 1000;
                     mp3Cutter.end = slider_values.get(1) + slider_milli_right.getValues().get(0) / 1000;
-                    mp3Cutter.outputPath = "/storage/emulated/0/Music/test.mp3";
+                    mp3Cutter.outputPath = boardPath + "tmp.mp3";
                     mp3Cutter.cut();
+
+                    Intent intent = new Intent(getActivity(), soundCut.class);
+                    intent.putExtra("cutSoundPath", mp3Cutter.outputPath);
+                    intent.putExtra("soundName", getFileName(uri));
+                    Objects.requireNonNull(getTargetFragment()).onActivityResult(getTargetRequestCode(), 202, intent);
+
+                    requireActivity().getSupportFragmentManager().popBackStack();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

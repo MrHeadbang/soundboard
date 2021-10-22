@@ -4,28 +4,96 @@
     android:background="@color/primary"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true">
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            app:cardCornerRadius="60dp"
+            app:cardPreventCornerOverlap="false">
+            <androidx.cardview.widget.CardView
+                android:layout_width="114dp"
+                android:layout_height="114dp"
+                app:cardCornerRadius="57dp"
+                app:cardPreventCornerOverlap="false"
+                android:backgroundTint="@color/primary"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:src="@drawable/ic_baseline_add_24"
+                    android:scaleType="center"
+                    android:foreground="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/soundboard_edit_addimage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:tint="@color/primaryAccent" />
+            </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryAccent"
+            android:text="Image"
+            android:layout_gravity="center_horizontal"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primaryAccent"
+        android:text="Name"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/new_soundboard_name"
+        android:backgroundTint="@color/primaryAccent"
+        android:textColor="@color/primaryAccent"
+        android:layout_marginBottom="20dp"/>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center"
         android:id="@+id/soundboard_edit_addsound"
         android:foreground="?selectableItemBackground"
         android:clickable="true"
-        android:focusable="true">
-        <ImageView
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            app:tint="@color/primaryAccent"
-            android:src="@drawable/ic_baseline_add_24"/>
+        android:focusable="true"
+        android:padding="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/primaryAccent"
-            android:text="Add sound"/>
-    </LinearLayout>
+            android:text="Sound"
+            android:textStyle="bold"/>
 
+        <TextView
+            android:id="@+id/soundboard_edit_soundname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryAccent"
+            android:text="Click to select a sound"/>
+
+    </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

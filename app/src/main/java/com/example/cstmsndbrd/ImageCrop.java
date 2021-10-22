@@ -62,7 +62,7 @@ public class ImageCrop extends Fragment {
             Intent intent = new Intent(getActivity(), ImageCrop.class);
             intent.putExtra("cropped", byteArray);
 
-            getTargetFragment().onActivityResult(getTargetRequestCode(), 201, intent);
+            Objects.requireNonNull(getTargetFragment()).onActivityResult(getTargetRequestCode(), 201, intent);
             requireActivity().getSupportFragmentManager().popBackStack();
         }
         return super.onOptionsItemSelected(item);

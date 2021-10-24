@@ -70,30 +70,76 @@
         android:textColor="@color/primaryAccent"
         android:layout_marginBottom="20dp"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/soundboard_edit_addsound"
+                    android:foreground="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:layout_weight="1">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primaryAccent"
+                        android:text="Sound"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/soundboard_edit_soundname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/primaryAccent"
+                        android:text="Click to select a sound"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="42dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_baseline_play_arrow_24"
+                    app:tint="@color/primaryAccent"
+                    android:layout_gravity="center"
+                    android:paddingRight="10dp"
+                    android:foreground="?selectableItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/sound_preview"/>
+
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/soundboard_edit_addsound"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:id="@+id/soundboard_edit_add"
         android:foreground="?selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="10dp">
+        android:clickable="true">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:tint="@color/primaryAccent"
+            android:src="@drawable/ic_baseline_add_24"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Add"
             android:textColor="@color/primaryAccent"
-            android:text="Sound"
             android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/soundboard_edit_soundname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/primaryAccent"
-            android:text="Click to select a sound"/>
-
-    </LinearLayout>
     </LinearLayout>
 </LinearLayout>

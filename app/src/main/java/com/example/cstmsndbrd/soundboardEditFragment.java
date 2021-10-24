@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,14 +27,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.io.File;
+import java.util.Objects;
+
 public class soundboardEditFragment extends Fragment {
-    private LinearLayout soundboard_edit_addsound;
+    private LinearLayout soundboard_edit_addsound, soundboard_edit_add;
     private int REQ_CODE_PICK_SOUNDFILE = 1;
     private globals globals = new globals();
     private String boardPath = "", soundName = "", cutSoundPath = "";
-    private ImageView soundboard_edit_addimage;
+    private ImageView soundboard_edit_addimage, sound_preview;
     private Bitmap cropped;
     private TextView soundboard_edit_soundname;
+    private boolean preview_switch = false;
+    private MediaPlayer mediaPlayer = null;
+    private EditText new_soundboard_name;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,8 +50,14 @@ public class soundboardEditFragment extends Fragment {
         soundboard_edit_addsound = view.findViewById(R.id.soundboard_edit_addsound);
         soundboard_edit_addimage = view.findViewById(R.id.soundboard_edit_addimage);
         soundboard_edit_soundname = view.findViewById(R.id.soundboard_edit_soundname);
+        soundboard_edit_add = view.findViewById(R.id.soundboard_edit_add);
+        sound_preview = view.findViewById(R.id.sound_preview);
+        new_soundboard_name = view.findViewById(R.id.new_soundboard_name);
         Bundle args = getArguments();
-        boardPath = args.getString("boardPath");
+        boardPath = Objects.requireNonNull(args).getString("boardPath");
+
+
+        String compareSound = soundboard_edit_soundname.getText().toString();
 
         soundboard_edit_addsound.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +69,26 @@ public class soundboardEditFragment extends Fragment {
                 startActivityForResult(Intent.createChooser(intent, "Select Audio File"), REQ_CODE_PICK_SOUNDFILE);
             }
         });
+
+        sound_preview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mediaPlayer == null) {
+                    Snackbar.make(view, "Please select a sound!", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+                if(preview_switch) {
+                    sound_preview.setImageResource(R.drawable.ic_baseline_play_arrow_24);
+                    mediaPlayer.reset();
+                } else {
+                    sound_preview.setImageResource(R.drawable.ic_baseline_stop_24);
+                    mediaPlayer = MediaPlayer.create(requireContext(), Uri.parse(cutSoundPath));
+                    mediaPlayer.start();
+                }
+                preview_switch = !preview_switch;
+            }
+        });
+
         ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -80,6 +116,25 @@ public class soundboardEditFragment extends Fragment {
                 mLauncher.launch(i);
             }
         });
+
+        soundboard_edit_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(new_soundboard_name.getText().toString().equals("")) {
+                    Snackbar.make(requireView(), "Please enter a name!", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+                if(compareSound == soundboard_edit_soundname.getText().toString()) {
+                    Snackbar.make(requireView(), "Please select a sound!", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+                FileManager fileManager = new FileManager(requireContext(), boardPath);
+                fileManager.addSound(cropped, new_soundboard_name.getText().toString());
+                requireActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
         return view;
     }
 
@@ -114,6 +169,7 @@ public class soundboardEditFragment extends Fragment {
                 soundName = data.getStringExtra("soundName");
                 cutSoundPath = data.getStringExtra("cutSoundPath");
                 soundboard_edit_soundname.setText(soundName);
+                mediaPlayer = MediaPlayer.create(requireContext(), Uri.parse(cutSoundPath));
             }
         }
     }

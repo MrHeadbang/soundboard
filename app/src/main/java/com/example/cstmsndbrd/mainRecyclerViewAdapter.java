@@ -116,7 +116,7 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
             @Override
             public void onClick(View view) {
                 Bundle args = new Bundle();
-                args.putString("config", finalConfigObject.toString());
+                //args.putString("config", finalConfigObject.toString());
                 args.putString("path", boardPath + "/");
                 Fragment soundboardFragment = new soundboardFragment();
                 soundboardFragment.setArguments(args);

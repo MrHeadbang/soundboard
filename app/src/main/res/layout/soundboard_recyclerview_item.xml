@@ -4,18 +4,20 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="5dp"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+
+    android:id="@+id/soundboard_layout_card">
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/soundboard_layout"
         android:background="@color/primary"
-        android:gravity="center"
-        android:padding="8dp"
+        android:gravity="center_horizontal"
         android:foreground="?selectableItemBackground"
-        android:clickable="true">
+        android:clickable="true"
+        android:padding="8dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="60dp"

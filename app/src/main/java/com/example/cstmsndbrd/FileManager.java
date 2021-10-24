@@ -2,10 +2,12 @@ package com.example.cstmsndbrd;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -152,7 +154,49 @@ public class FileManager {
             f.delete();
         }
     }
-    public void addSound(File soundFile, Bitmap soundImage, String soundName) {
+    public void addSound(Bitmap soundImage, String soundName) {
+
+        if(soundImage == null) {
+            soundImage = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+            soundImage.eraseColor(Color.WHITE);
+        }
+        try {
+            JSONObject soundObject = configObject.getJSONObject("Board").getJSONObject("soundList");
+            JSONArray soundNames = soundObject.names();
+            String lastName = soundNames.get(soundNames.length() - 1).toString();
+            int lastInt = Integer.parseInt(lastName.replace("sound", ""));
+            String lastSoundName = "sound" + String.valueOf(lastInt + 1);
+
+
+            if(soundImage == null)
+                return;
+            String bitmapName = lastSoundName + ".png";
+            File outputFile = new File(SOUNDBOARD_PATH + bitmapName);
+            outputFile.createNewFile();
+            FileOutputStream fOut = null;
+            fOut = new FileOutputStream(outputFile);
+            soundImage.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+
+            String soundFilePath = lastSoundName + ".mp3";
+
+            File from = new File(SOUNDBOARD_PATH,"tmp.mp3");
+            File to = new File(SOUNDBOARD_PATH, soundFilePath);
+            if(from.exists())
+                from.renameTo(to);
+
+            JSONObject newSound = new JSONObject();
+            newSound.put("soundName", soundName);
+            newSound.put("soundImagePath", bitmapName);
+            newSound.put("soundFilePath", soundFilePath);
+            soundObject.put(lastSoundName, newSound);
+            configObject.getJSONObject("Board").put("soundList", soundObject);
+            save();
+
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
 
     }
 }

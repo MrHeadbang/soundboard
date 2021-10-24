@@ -61,6 +61,7 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
             else
                 itemHolder.soundboard_item_image.setBackgroundColor(randomColor);
             itemHolder.soundboard_layout.setBackgroundColor(randomColor);
+            itemHolder.soundboard_layout_card.setCardBackgroundColor(randomColor);
             itemHolder.soundboard_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -71,6 +72,13 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
                     mediaPlayer.start();
                 }
             });
+            itemHolder.soundboard_layout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Toast.makeText(context, params.get(0), Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            });
 
 
         } else if(holder instanceof Footer) {
@@ -78,6 +86,8 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
             itemHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(mediaPlayer != null)
+                        mediaPlayer.reset();
                     Bundle bundle = new Bundle();
                     bundle.putString("boardPath", boardPath);
                     soundboardEditFragment soundboardEditFragment = new soundboardEditFragment();
@@ -85,6 +95,7 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
                     globals.setFragment(context, soundboardEditFragment, "soundboardEditFragment");
                 }
             });
+
 
         }
 
@@ -118,11 +129,13 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
         LinearLayout soundboard_layout;
         ImageView soundboard_item_image;
         TextView soundboard_item_caption;
+        CardView soundboard_layout_card;
         public SoundItem(View view) {
             super(view);
             soundboard_layout = view.findViewById(R.id.soundboard_layout);
             soundboard_item_image = view.findViewById(R.id.soundboard_item_image);
             soundboard_item_caption = view.findViewById(R.id.soundboard_item_caption);
+            soundboard_layout_card = view.findViewById(R.id.soundboard_layout_card);
         }
     }
 }

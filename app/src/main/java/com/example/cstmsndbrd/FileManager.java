@@ -1,8 +1,10 @@
 package com.example.cstmsndbrd;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
@@ -163,7 +165,9 @@ public class FileManager {
         try {
             JSONObject soundObject = configObject.getJSONObject("Board").getJSONObject("soundList");
             JSONArray soundNames = soundObject.names();
-            String lastName = soundNames.get(soundNames.length() - 1).toString();
+            String lastName = "sound0";
+            if(soundNames != null)
+                lastName = soundNames.get(soundNames.length() - 1).toString();
             int lastInt = Integer.parseInt(lastName.replace("sound", ""));
             String lastSoundName = "sound" + String.valueOf(lastInt + 1);
 
@@ -198,5 +202,40 @@ public class FileManager {
             e.printStackTrace();
         }
 
+    }
+    void deleteSound(int index) {
+        try {
+            JSONObject soundObject = configObject.getJSONObject("Board").getJSONObject("soundList");
+            JSONArray soundNames = soundObject.names();
+
+            String soundDelete = soundNames.get(index).toString();
+
+            File soundFile = new File(SOUNDBOARD_PATH + soundDelete + ".mp3");
+            File imageFile = new File(SOUNDBOARD_PATH + soundDelete + ".png");
+
+            soundFile.delete();
+            imageFile.delete();
+
+            configObject.getJSONObject("Board").getJSONObject("soundList").remove(soundDelete).toString();
+            save();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    void shareAudio(int index) {
+        try {
+            JSONObject soundObject = configObject.getJSONObject("Board").getJSONObject("soundList");
+            JSONArray soundNames = soundObject.names();
+            String soundPath = SOUNDBOARD_PATH + soundNames.get(index).toString() + ".mp3";
+            Uri uri = Uri.parse(soundPath);
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("audio/*");
+            share.putExtra(Intent.EXTRA_STREAM, uri);
+            context.startActivity(Intent.createChooser(share, "Share Sound"));
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

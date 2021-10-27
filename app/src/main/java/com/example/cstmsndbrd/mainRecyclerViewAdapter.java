@@ -158,13 +158,13 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
 
         LinearLayout shareOption = layout.findViewById(R.id.shareOption);
         LinearLayout deleteOption = layout.findViewById(R.id.deleteOption);
+        LinearLayout editOption = layout.findViewById(R.id.editOption);
+        editOption.setVisibility(View.VISIBLE);
         FileManager fileManager = new FileManager(context, boardPath);
         shareOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeStatusPopUp.dismiss();
-                
-
             }
         });
         deleteOption.setOnClickListener(new View.OnClickListener() {
@@ -188,6 +188,12 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
                 });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+            }
+        });
+        editOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeStatusPopUp.dismiss();
             }
         });
 

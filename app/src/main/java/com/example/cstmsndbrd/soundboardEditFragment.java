@@ -73,7 +73,7 @@ public class soundboardEditFragment extends Fragment {
         sound_preview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mediaPlayer == null) {
+                if(compareSound.equals(soundboard_edit_soundname.getText().toString())) {
                     Snackbar.make(view, "Please select a sound!", Snackbar.LENGTH_LONG).show();
                     return;
                 }
@@ -125,10 +125,12 @@ public class soundboardEditFragment extends Fragment {
                     Snackbar.make(requireView(), "Please enter a name!", Snackbar.LENGTH_LONG).show();
                     return;
                 }
-                if(compareSound == soundboard_edit_soundname.getText().toString()) {
+                if(compareSound.equals(soundboard_edit_soundname.getText().toString())) {
                     Snackbar.make(requireView(), "Please select a sound!", Snackbar.LENGTH_LONG).show();
                     return;
                 }
+                if(mediaPlayer != null)
+                    mediaPlayer.reset();
                 FileManager fileManager = new FileManager(requireContext(), boardPath);
                 fileManager.addSound(cropped, new_soundboard_name.getText().toString());
                 requireActivity().getSupportFragmentManager().popBackStack();

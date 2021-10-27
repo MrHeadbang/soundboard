@@ -1,11 +1,21 @@
 package com.example.cstmsndbrd;
 
+import static android.content.ContentValues.TAG;
+import static com.arthenica.mobileffmpeg.Config.getPackageName;
+
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ZygotePreload;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +64,8 @@ public class mainFragment extends Fragment {
                 globals.setFragment(getActivity(), new soundboardNewFragment(), "soundboardNewFragment");
             }
         });
+
+
         requireActivity().getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     public void onBackStackChanged() {
@@ -81,6 +93,7 @@ public class mainFragment extends Fragment {
                     }
                 });
 
+
         return view;
     }
     public static void hideKeyboard(Activity activity) {
@@ -90,5 +103,40 @@ public class mainFragment extends Fragment {
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkPermission();
+
+    }
+
+    private void block() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.AlertDialog);
+        builder.setCancelable(false);
+        builder.setMessage("Please allow full storage permission. It's necessary to create and store the sound files.");
+        builder.setTitle("Warning");
+        builder.setIcon(R.drawable.ic_baseline_warning_24);
+        builder.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+    }
+    private void checkPermission() {
+        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+            //|| ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+            //|| ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        ) { block();
+        }
     }
 }

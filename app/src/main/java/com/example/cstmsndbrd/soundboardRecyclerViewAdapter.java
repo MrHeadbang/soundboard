@@ -1,23 +1,30 @@
 package com.example.cstmsndbrd;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -75,8 +82,20 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
             itemHolder.soundboard_layout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    Toast.makeText(context, params.get(0), Toast.LENGTH_LONG).show();
+                    int[] location = new int[2];
+                    view.getLocationOnScreen(location);
+                    Point point = new Point();
+                    point.x = location[0];
+                    point.y = location[1];
+                    showStatusPopup(context, point, boardPath, holder.getAdapterPosition());
                     return false;
+                }
+            });
+            ((MainActivity) context).getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+                @Override
+                public void onBackStackChanged() {
+                    if(mediaPlayer != null)
+                        mediaPlayer.reset();
                 }
             });
 
@@ -100,7 +119,63 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
         }
 
     }
+    private void showStatusPopup(final Context context, Point p, String boardPath, int position) {
 
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.options_popup, null);
+
+        PopupWindow changeStatusPopUp = new PopupWindow(context);
+        changeStatusPopUp.setContentView(layout);
+        changeStatusPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeStatusPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeStatusPopUp.setAnimationStyle(android.R.style.Animation_Dialog);
+
+        int OFFSET_X = -300 + 300;
+        int OFFSET_Y = 150;
+
+        changeStatusPopUp.setOutsideTouchable(true);
+        changeStatusPopUp.setFocusable(true);
+        changeStatusPopUp.setBackgroundDrawable(new BitmapDrawable());
+        changeStatusPopUp.showAtLocation(layout, Gravity.NO_GRAVITY, p.x + OFFSET_X, p.y + OFFSET_Y);
+
+        LinearLayout shareOption = layout.findViewById(R.id.shareOption);
+        LinearLayout deleteOption = layout.findViewById(R.id.deleteOption);
+        FileManager fileManager = new FileManager(context, boardPath);
+        shareOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeStatusPopUp.dismiss();
+                fileManager.shareAudio(position);
+            }
+        });
+        deleteOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeStatusPopUp.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AlertDialog);
+                builder.setTitle("Warning");
+                builder.setIcon(R.drawable.ic_baseline_warning_24);
+                builder.setMessage("This sound will be lost.");
+                builder.setCancelable(true);
+                builder.setNegativeButton("CANCEL", null);
+                builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        if(mediaPlayer != null)
+                            mediaPlayer.reset();
+
+                        fileManager.deleteSound(position);
+                        sounds.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, sounds.size());
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+
+    }
     @Override
     public int getItemCount() {
         return sounds.size() + 1;

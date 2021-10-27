@@ -41,6 +41,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.loader.content.CursorLoader;
 
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
@@ -94,7 +95,6 @@ public class soundCut extends Fragment {
 
 
 
-
         cut_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,7 +136,14 @@ public class soundCut extends Fragment {
             public void onClick(View view) {
                 try {
                     mediaPlayer.stop();
+
+                    //DOESN'T WORK FROM SD CARDS
+
                     File mp3File = FileUtils.getFileFromUri(getActivity(), uri);
+
+
+
+
                     String mp3FilePath = mp3File.getAbsolutePath();
                     Mp3Cutter mp3Cutter = new Mp3Cutter(getActivity());
                     List<Float> slider_values = slider.getValues();
@@ -161,6 +168,18 @@ public class soundCut extends Fragment {
 
         return view;
     }
+
+    private String getRealPathFromURI(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        CursorLoader loader = new CursorLoader(requireContext(), contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
+    }
+
     @SuppressLint("DefaultLocale")
     private void setSeconds() {
         List<Float> slider_values = slider.getValues();

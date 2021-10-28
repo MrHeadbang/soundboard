@@ -25,7 +25,7 @@ public class Mp3Cutter {
         this.context = context;
     }
     public void cut() {
-        ProgressDialog progressDialog = new ProgressDialog(context, R.style.AppCompatAlertDialogStyle);
+        ProgressDialog progressDialog = new ProgressDialog(context, R.style.AlertDialog);
         progressDialog.setMessage("Please wait..");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);

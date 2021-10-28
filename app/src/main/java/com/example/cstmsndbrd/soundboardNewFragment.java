@@ -114,6 +114,5 @@ public class soundboardNewFragment extends Fragment {
                 new_soundboard_image.setImageBitmap(cropped);
             }
         }
-
     }
 }

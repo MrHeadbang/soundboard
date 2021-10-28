@@ -161,13 +161,9 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
         LinearLayout editOption = layout.findViewById(R.id.editOption);
         editOption.setVisibility(View.VISIBLE);
         FileManager fileManager = new FileManager(context, boardPath);
-        shareOption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeStatusPopUp.dismiss();
-            }
-        });
+        shareOption.setVisibility(View.GONE);
         deleteOption.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onClick(View view) {
                 changeStatusPopUp.dismiss();
@@ -188,12 +184,21 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
                 });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.primaryAccent));
+                alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.primaryAccent));
+
             }
         });
         editOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeStatusPopUp.dismiss();
+                soundboardEditSpecsFragment soundboardEditSpecsFragment = new soundboardEditSpecsFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("path", boardPath);
+                soundboardEditSpecsFragment.setArguments(bundle);
+                globals.setFragment(context, soundboardEditSpecsFragment, "soundboardEditSpecsFragment");
             }
         });
 

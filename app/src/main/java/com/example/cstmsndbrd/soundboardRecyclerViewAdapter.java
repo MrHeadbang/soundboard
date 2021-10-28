@@ -172,6 +172,8 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
                 });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.primaryAccent));
+                alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.primaryAccent));
             }
         });
 

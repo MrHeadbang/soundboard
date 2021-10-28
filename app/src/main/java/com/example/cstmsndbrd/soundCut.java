@@ -45,6 +45,7 @@ import androidx.loader.content.CursorLoader;
 
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.w3c.dom.Text;
 
@@ -141,9 +142,6 @@ public class soundCut extends Fragment {
 
                     File mp3File = FileUtils.getFileFromUri(getActivity(), uri);
 
-
-
-
                     String mp3FilePath = mp3File.getAbsolutePath();
                     Mp3Cutter mp3Cutter = new Mp3Cutter(getActivity());
                     List<Float> slider_values = slider.getValues();
@@ -161,6 +159,8 @@ public class soundCut extends Fragment {
                     requireActivity().getSupportFragmentManager().popBackStack();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    Snackbar.make(view, "Can't read files from external drives.", Snackbar.LENGTH_LONG).show();
+                    requireActivity().getSupportFragmentManager().popBackStack();
                 }
             }
         });

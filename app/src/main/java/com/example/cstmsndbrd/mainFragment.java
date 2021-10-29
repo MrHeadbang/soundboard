@@ -20,11 +20,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -47,6 +49,8 @@ public class mainFragment extends Fragment {
     private String appDirectoryPaths;
     private LinearLayout new_soundboard;
     private globals globals = new globals();
+
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,31 +73,10 @@ public class mainFragment extends Fragment {
         requireActivity().getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     public void onBackStackChanged() {
-
-                        try {
-                            appDirectoryPaths = Environment.getExternalStorageDirectory().toString() + "/" + "soundboards";
-                            appDirectory = new File(appDirectoryPaths);
-                            if (!appDirectory.exists()) appDirectory.mkdir();
-                            boardFiles = appDirectory.listFiles();
-                            boardPaths = new ArrayList<String>();
-                            if (boardFiles.length > 0)
-                                for (int i = boardFiles.length - 1; i >= 0; i--)
-                                    boardPaths.add(boardFiles[i].getName());
-
-                            mainRecyclerViewAdapter mainRecyclerViewAdapter = new mainRecyclerViewAdapter(getActivity(), boardPaths, appDirectoryPaths);
-                            int curSize = mainRecyclerViewAdapter.getItemCount();
-                            mainRecyclerViewAdapter.notifyItemRangeInserted(curSize, boardPaths.size());
-                            mainRecyclerView.setAdapter(mainRecyclerViewAdapter);
-                            hideKeyboard(requireActivity());
-
-                        } catch (Exception e) {
-                            Snackbar.make(requireView(), "Could not create directory. Check storage permissions!", Snackbar.LENGTH_LONG).show();
-                        }
-
+                        directoryLister();
                     }
                 });
-
-
+        checkPermission();
         return view;
     }
     public static void hideKeyboard(Activity activity) {
@@ -105,38 +88,61 @@ public class mainFragment extends Fragment {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
+    public void directoryLister() {
+        try {
+            appDirectoryPaths = Environment.getExternalStorageDirectory().toString() + "/" + "soundboards";
+            appDirectory = new File(appDirectoryPaths);
+            if (!appDirectory.exists()) appDirectory.mkdir();
+            boardFiles = appDirectory.listFiles();
+            boardPaths = new ArrayList<String>();
+            if (boardFiles.length > 0)
+                for (int i = boardFiles.length - 1; i >= 0; i--)
+                    boardPaths.add(boardFiles[i].getName());
 
+            mainRecyclerViewAdapter mainRecyclerViewAdapter = new mainRecyclerViewAdapter(getActivity(), boardPaths, appDirectoryPaths);
+            int curSize = mainRecyclerViewAdapter.getItemCount();
+            mainRecyclerViewAdapter.notifyItemRangeInserted(curSize, boardPaths.size());
+            mainRecyclerView.setAdapter(mainRecyclerViewAdapter);
+            hideKeyboard(requireActivity());
+
+        } catch (Exception e) {
+            Snackbar.make(requireView(), "Could not create directory. Check storage permissions!", Snackbar.LENGTH_LONG).show();
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     public void onResume() {
         super.onResume();
-        checkPermission();
-
+        directoryLister();
+        if(Environment.isExternalStorageManager() && alertDialog != null)
+            alertDialog.dismiss();
     }
-
-    private void block() {
+    private AlertDialog alertDialog = null;
+    @RequiresApi(api = Build.VERSION_CODES.R)
+    private void checkPermission() {
+        if (Environment.isExternalStorageManager())
+            return;
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.AlertDialog);
         builder.setCancelable(false);
         builder.setMessage("Please allow full storage permission. It's necessary to create and store the sound files.");
         builder.setTitle("Warning");
         builder.setIcon(R.drawable.ic_baseline_warning_24);
-        builder.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Settings", null);
+        if(alertDialog != null)
+            alertDialog.dismiss();
+        alertDialog = builder.create();
+
+        alertDialog.show();
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.primaryAccent));
+        Button button = ((AlertDialog) alertDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onClick(View view) {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
                 intent.setData(uri);
                 startActivity(intent);
             }
         });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-
-    }
-    private void checkPermission() {
-        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-            //|| ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-            //|| ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-        ) { block();
-        }
     }
 }

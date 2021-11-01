@@ -8,8 +8,8 @@ An app to create a custom soundboard very fast and easy.
 <ul>
 <li>Free</li>
 <li>Adfree</li>
-<li>Open Source</li>
-<li>Simple Design</li>
+<li>Open source</li>
+<li>Simple design</li>
 <li>Light and fast</li>
 </ul>
 

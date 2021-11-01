@@ -70,7 +70,7 @@ public class soundCut extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sound_cut, container, false);
         Bundle args = getArguments();
-        audioPath = args.getString("audioUri");
+        audioPath = Objects.requireNonNull(args).getString("audioUri");
         boardPath = args.getString("boardPath");
         slider = view.findViewById(R.id.slider_multiple_thumbs);
         cut_play = view.findViewById(R.id.cut_play);
@@ -93,10 +93,8 @@ public class soundCut extends Fragment {
         setSliderSpecs();
         setSeconds();
 
-
-
-
         cut_play.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
                 if(play_switcher) {
@@ -112,7 +110,6 @@ public class soundCut extends Fragment {
                 }
             }
         });
-        //Toast.makeText(getActivity(), slider.getValues().get(0).toString(), Toast.LENGTH_LONG).show();
         setEditTextValues();
         slider.addOnChangeListener(new RangeSlider.OnChangeListener() {
             @Override
@@ -137,11 +134,7 @@ public class soundCut extends Fragment {
             public void onClick(View view) {
                 try {
                     mediaPlayer.stop();
-
-                    //DOESN'T WORK FROM SD CARDS
-
                     File mp3File = FileUtils.getFileFromUri(getActivity(), uri);
-
                     String mp3FilePath = mp3File.getAbsolutePath();
                     Mp3Cutter mp3Cutter = new Mp3Cutter(getActivity());
                     List<Float> slider_values = slider.getValues();
@@ -150,12 +143,10 @@ public class soundCut extends Fragment {
                     mp3Cutter.end = slider_values.get(1) + slider_milli_right.getValues().get(0) / 1000;
                     mp3Cutter.outputPath = boardPath + "tmp.mp3";
                     mp3Cutter.cut();
-
                     Intent intent = new Intent(getActivity(), soundCut.class);
                     intent.putExtra("cutSoundPath", mp3Cutter.outputPath);
                     intent.putExtra("soundName", getFileName(uri));
                     Objects.requireNonNull(getTargetFragment()).onActivityResult(getTargetRequestCode(), 202, intent);
-
                     requireActivity().getSupportFragmentManager().popBackStack();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -164,20 +155,7 @@ public class soundCut extends Fragment {
                 }
             }
         });
-
-
         return view;
-    }
-
-    private String getRealPathFromURI(Uri contentUri) {
-        String[] proj = { MediaStore.Images.Media.DATA };
-        CursorLoader loader = new CursorLoader(requireContext(), contentUri, proj, null, null, null);
-        Cursor cursor = loader.loadInBackground();
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String result = cursor.getString(column_index);
-        cursor.close();
-        return result;
     }
 
     @SuppressLint("DefaultLocale")
@@ -198,13 +176,10 @@ public class soundCut extends Fragment {
     public String getFileName(Uri uri) {
         String result = null;
         if (uri.getScheme().equals("content")) {
-            Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-            try {
+            try (Cursor cursor = requireActivity().getContentResolver().query(uri, null, null, null, null)) {
                 if (cursor != null && cursor.moveToFirst()) {
                     result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
                 }
-            } finally {
-                cursor.close();
             }
         }
         if (result == null) {
@@ -229,25 +204,16 @@ public class soundCut extends Fragment {
         }
 
     }
-    private float MinutesToSeconds(String minuteString) {
-        int minutes = Integer.parseInt(minuteString.split(":")[0]);
-        float seconds = Float.parseFloat(minuteString.split(":")[1]);
-        return minutes * 60 + seconds;
-    }
     @SuppressLint("DefaultLocale")
     private String secondsToMinutes(float secs) {
-
         int minutes = 0;
         while(secs >= 60) {
             secs -= 60;
             minutes++;
         }
-
-        //return String.valueOf(minutes) + ":" + String.valueOf(secs);
         String secSet = String.valueOf(secs).split("\\.")[0];
         String millsecSet = String.valueOf(secs).split("\\.")[1];
         return String.valueOf(minutes) + ":" + fill(secSet) + "." + String.format("%.3s", millsecSet);
-        //return String.valueOf(minutes) + ":" + String.format("%.3f", secs).replace(",", ".");
     }
     private String fill(String s) {
         String first = s.split(":")[0];
@@ -282,7 +248,6 @@ public class soundCut extends Fragment {
 
 
     private void playCuts(float start, float end, Uri uri) {
-        //mediaPlayer.release();
         mediaPlayer = MediaPlayer.create(getActivity(), uri);
         mediaPlayer.seekTo((int) (start * 1000));
         mediaPlayer.setOnSeekCompleteListener(new MediaPlayer.OnSeekCompleteListener() {
@@ -298,7 +263,5 @@ public class soundCut extends Fragment {
                 }, (long)(end - start) * 1000);
             }
         });
-
-
     }
 }

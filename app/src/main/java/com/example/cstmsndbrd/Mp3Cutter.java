@@ -34,7 +34,6 @@ public class Mp3Cutter {
         String command = "-y -i '" + mp3FilePath + "' -ss " + start + " -to " + end + " -c copy " + outputPath;
 
         long executionId = FFmpeg.executeAsync(command, new ExecuteCallback() {
-
             @Override
             public void apply(final long executionId, final int returnCode) {
                 if (returnCode == RETURN_CODE_SUCCESS) {

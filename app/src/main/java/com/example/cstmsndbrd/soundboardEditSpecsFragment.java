@@ -1,5 +1,6 @@
 package com.example.cstmsndbrd;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +43,7 @@ public class soundboardEditSpecsFragment extends Fragment {
     private TextView save_text;
     private Bitmap cropped = null;
     private globals globals = new globals();
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -85,7 +87,7 @@ public class soundboardEditSpecsFragment extends Fragment {
             new_soundboard_desc.setText(boardDesc);
             new_soundboard_image.setImageBitmap(cropped);
         }
-        catch (IOException | JSONException e) {
+        catch (IOException | JSONException ignored) {
         }
         ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -115,7 +117,6 @@ public class soundboardEditSpecsFragment extends Fragment {
             }
         });
 
-
         new_soundboard_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,7 +134,6 @@ public class soundboardEditSpecsFragment extends Fragment {
                 requireActivity().getSupportFragmentManager().popBackStack();
             }
         });
-
         return view;
     }
     @Override

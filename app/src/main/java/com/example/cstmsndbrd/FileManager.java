@@ -37,12 +37,8 @@ public class FileManager {
             createBody();
             return;
         }
-
-
         this.SOUNDBOARD_PATH = SOUNDBOARD_PATH;
         this.configFile = new File(this.SOUNDBOARD_PATH + "config.json");
-
-
         StringBuilder text = new StringBuilder();
         try {
             BufferedReader br = new BufferedReader(new FileReader(configFile));
@@ -53,7 +49,7 @@ public class FileManager {
             }
             br.close();
         }
-        catch (IOException e) {
+        catch (IOException ignored) {
         }
 
         try {
@@ -80,7 +76,6 @@ public class FileManager {
         jsonData.put("boardImagePath", "");
         JSONObject jsonSounds = new JSONObject();
         jsonData.put("soundList", jsonSounds);
-
         JSONObject output = new JSONObject();
         output.put("Board", jsonData);
         return output;
@@ -95,13 +90,12 @@ public class FileManager {
         File appDirectory = new File(path);
         File[] boardFiles = appDirectory.listFiles();
         int boardCounter = 0;
-        if(boardFiles.length > 0) {
+        if(Objects.requireNonNull(boardFiles).length > 0) {
             String lastBoard = boardFiles[boardFiles.length - 1].toString();
             boardCounter = Integer.parseInt(lastBoard.substring(lastBoard.length() - 1));
         }
         SOUNDBOARD_PATH = newPATH(path, boardCounter + 1);
         configFile = new File(SOUNDBOARD_PATH + "/config.json");
-
         File newBoard = new File(SOUNDBOARD_PATH);
         if (!newBoard.exists()) newBoard.mkdir();
         try {
@@ -142,7 +136,7 @@ public class FileManager {
     }
     private void deleteSubFolders(String uri) {
         File currentFolder = new File(uri);
-        File files[] = currentFolder.listFiles();
+        File[] files = currentFolder.listFiles();
 
         if (files == null) {
             return;
@@ -170,7 +164,6 @@ public class FileManager {
                 lastName = soundNames.get(soundNames.length() - 1).toString();
             int lastInt = Integer.parseInt(lastName.replace("sound", ""));
             String lastSoundName = "sound" + String.valueOf(lastInt + 1);
-
 
             if(soundImage == null)
                 return;
@@ -226,14 +219,12 @@ public class FileManager {
         try {
             JSONObject soundObject = configObject.getJSONObject("Board").getJSONObject("soundList");
             JSONArray soundNames = soundObject.names();
-            String soundPath = SOUNDBOARD_PATH + soundNames.get(index).toString() + ".mp3";
+            String soundPath = SOUNDBOARD_PATH + Objects.requireNonNull(soundNames).get(index).toString() + ".mp3";
             Uri uri = Uri.parse(soundPath);
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("audio/*");
             share.putExtra(Intent.EXTRA_STREAM, uri);
             context.startActivity(Intent.createChooser(share, "Share Sound"));
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }

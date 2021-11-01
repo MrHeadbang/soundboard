@@ -72,13 +72,8 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
     @Override
     public void onBindViewHolder(@NonNull mainRecyclerViewAdapter.ViewHolder holder, int position) {
         String boardPath = appDirectoryPath + "/" + boardPaths.get(position);
-        File boardFiles = new File(boardPath);
-
         File file = new File(boardPath + "/config.json");
         StringBuilder text = new StringBuilder();
-
-        FileManager fileManager = new FileManager(context, boardPath);
-
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
@@ -93,21 +88,13 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
         JSONObject configObject = null;
         String boardName = "";
         String boardImagePath = "";
-        String boardDesc = "";
-
         try {
             configObject = new JSONObject(text.toString()).getJSONObject("Board");
-
             boardName = configObject.getString("boardName");
             boardImagePath = boardPath + "/" + configObject.getString("boardImagePath");
-            boardDesc = configObject.getString("boardDesc");
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-
         holder.main_recyclerview_item_name.setText(boardName);
         holder.main_recyclerview_item_image.setImageBitmap(BitmapFactory.decodeFile(boardImagePath));
         holder.main_recyclerview_item_layout.setBackgroundColor(globals.randomColor());
@@ -116,7 +103,6 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
             @Override
             public void onClick(View view) {
                 Bundle args = new Bundle();
-                //args.putString("config", finalConfigObject.toString());
                 args.putString("path", boardPath + "/");
                 Fragment soundboardFragment = new soundboardFragment();
                 soundboardFragment.setArguments(args);
@@ -134,13 +120,10 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
                 showStatusPopup(context, point, boardPath, holder.getAdapterPosition());
             }
         });
-
-
     }
     private void showStatusPopup(final Context context, Point p, String boardPath, int position) {
-
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = layoutInflater.inflate(R.layout.options_popup, null);
+        @SuppressLint("InflateParams") View layout = layoutInflater.inflate(R.layout.options_popup, null);
 
         PopupWindow changeStatusPopUp = new PopupWindow(context);
         changeStatusPopUp.setContentView(layout);
@@ -184,10 +167,8 @@ public class mainRecyclerViewAdapter extends RecyclerView.Adapter<mainRecyclerVi
                 });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
-
                 alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.primaryAccent));
                 alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(R.color.primaryAccent));
-
             }
         });
         editOption.setOnClickListener(new View.OnClickListener() {

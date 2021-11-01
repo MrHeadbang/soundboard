@@ -18,29 +18,20 @@ public class FileUtils {
 
     @SuppressLint("Range")
     public static File getFileFromUri(final Context context, final Uri uri) throws Exception {
-
-
         String path = null;
-
         if (DocumentsContract.isDocumentUri(context, uri)) { // TODO: 2015. 11. 17. KITKAT
-
-            // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
-
                 if ("primary".equalsIgnoreCase(type)) {
                     path = Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
-
-                // TODO handle non-primary volumes
-
-            } else if (isDownloadsDocument(uri)) { // DownloadsProvider
+            } else if (isDownloadsDocument(uri)) {
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
                 path = getDataColumn(context, contentUri, null, null);
-            } else if (isMediaDocument(uri)) { // MediaProvider
+            } else if (isMediaDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];

@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class soundboardFragment extends Fragment {
 
@@ -52,15 +53,12 @@ public class soundboardFragment extends Fragment {
         final String[] boardName = {""};
         final String[] boardImagePath = {""};
         final String[] boardDesc = {""};
-        String boardPath = args.getString("path");
-
+        String boardPath = Objects.requireNonNull(args).getString("path");
         requireActivity().getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-
                 File file = new File(boardPath + "config.json");
                 StringBuilder text = new StringBuilder();
-
                 try {
                     BufferedReader br = new BufferedReader(new FileReader(file));
                     String line;
@@ -70,18 +68,14 @@ public class soundboardFragment extends Fragment {
                     }
                     br.close();
                 }
-                catch (IOException e) {
+                catch (IOException ignored) {
                 }
-
-
                 try {
                     configObject[0] = new JSONObject(text.toString()).getJSONObject("Board");
-                    //configObject = new JSONObject(args.getString("config"));
                     boardName[0] = configObject[0].getString("boardName");
                     boardImagePath[0] = boardPath + configObject[0].getString("boardImagePath");
                     boardDesc[0] = configObject[0].getString("boardDesc");
                     soundList[0] = configObject[0].getJSONObject("soundList");
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -120,8 +114,6 @@ public class soundboardFragment extends Fragment {
                 soundboard_recyclerview.setAdapter(soundboardRecyclerViewAdapter);
             }
         });
-
         return view;
     }
-
 }

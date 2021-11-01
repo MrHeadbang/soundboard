@@ -36,7 +36,6 @@ public class ImageCrop extends Fragment {
         Bundle bundle = getArguments();
         assert bundle != null;
         uri = Uri.parse(bundle.getString("image_uri"));
-
         cropImageView = view.findViewById(R.id.cropImageView);
         cropImageView.setImageUriAsync(uri);
         cropImageView.setAspectRatio(1, 1);
@@ -58,10 +57,8 @@ public class ImageCrop extends Fragment {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             cropped.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
-
             Intent intent = new Intent(getActivity(), ImageCrop.class);
             intent.putExtra("cropped", byteArray);
-
             Objects.requireNonNull(getTargetFragment()).onActivityResult(getTargetRequestCode(), 201, intent);
             requireActivity().getSupportFragmentManager().popBackStack();
         }

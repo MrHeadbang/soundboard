@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.Random;
 
 public class globals {
-    private String[] colors = {"#000396", "#007820", "#960000", "#7d0079", "#bf6c00", "#009ea3"};
+    private final String[] colors = {"#000396", "#007820", "#960000", "#7d0079", "#bf6c00", "#009ea3"};
     private Context context;
 
     public int randomColor() {
@@ -33,8 +33,8 @@ public class globals {
 
     private static  String randName() {
         String output = "";
-        int leftLimit = 48; // numeral '0'
-        int rightLimit = 122; // letter 'z'
+        int leftLimit = 48;
+        int rightLimit = 122;
         Random random = new Random();
         output = random.ints(leftLimit, rightLimit + 1)
                 .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
@@ -42,11 +42,5 @@ public class globals {
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                 .toString();
         return output;
-    }
-
-    public static void createSoundboardDirectory() {
-        File soundboardDirectory = new File(SOUNDBOARDS_PATH + randName());
-        if (!soundboardDirectory.exists())
-            soundboardDirectory.mkdir();
     }
 }

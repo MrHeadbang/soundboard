@@ -1,5 +1,6 @@
 package com.example.cstmsndbrd;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -120,10 +121,8 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
 
     }
     private void showStatusPopup(final Context context, Point p, String boardPath, int position) {
-
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = layoutInflater.inflate(R.layout.options_popup, null);
-
+        @SuppressLint("InflateParams") View layout = layoutInflater.inflate(R.layout.options_popup, null);
         PopupWindow changeStatusPopUp = new PopupWindow(context);
         changeStatusPopUp.setContentView(layout);
         changeStatusPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -197,7 +196,6 @@ public class soundboardRecyclerViewAdapter extends RecyclerView.Adapter<soundboa
         }
     }
     public static class Footer extends ViewHolder {
-
         public Footer(View view) {
             super(view);
         }

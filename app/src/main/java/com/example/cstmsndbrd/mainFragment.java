@@ -69,7 +69,6 @@ public class mainFragment extends Fragment {
             }
         });
 
-
         requireActivity().getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     public void onBackStackChanged() {
@@ -131,7 +130,6 @@ public class mainFragment extends Fragment {
         if(alertDialog != null)
             alertDialog.dismiss();
         alertDialog = builder.create();
-
         alertDialog.show();
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.primaryAccent));
         Button button = ((AlertDialog) alertDialog).getButton(AlertDialog.BUTTON_POSITIVE);

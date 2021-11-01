@@ -76,7 +76,6 @@ public class soundboardNewFragment extends Fragment {
             }
         });
 
-
         new_soundboard_create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,7 +99,6 @@ public class soundboardNewFragment extends Fragment {
 
         return view;
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

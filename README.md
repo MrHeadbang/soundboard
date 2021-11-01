@@ -15,7 +15,7 @@ An app to create a custom soundboard very fast and easy.
 
 <b>Screenshots</b>
 
-<img src="images/screenshot1.png" width=250><img src="images/screenshot3.png" width=250>
+<img src="images/screenshot1.png" width=250><img src="images/screenshot2.png" width=250><img src="images/screenshot3.png" width=250>
 
 <b>Privacy Policy</b>
 

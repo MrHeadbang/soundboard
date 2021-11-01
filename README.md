@@ -12,3 +12,11 @@ An app to create a custom soundboard very fast and easy.
 <li>Simple Design</li>
 <li>Light and fast</li>
 </ul>
+
+<b>Screenshots</b>
+
+<img src="images/screenshot1.png" width=250>
+
+<b>Privacy Policy</b>
+
+This app works completely offline. <b>No</b> data is collected.

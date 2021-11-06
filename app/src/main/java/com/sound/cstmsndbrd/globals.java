@@ -1,18 +1,13 @@
-package com.example.cstmsndbrd;
+package com.sound.cstmsndbrd;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import java.io.File;
 import java.util.Random;
 
 public class globals {

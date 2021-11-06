@@ -1,4 +1,4 @@
-package com.example.cstmsndbrd;
+package com.sound.cstmsndbrd;
 
 import android.content.Context;
 

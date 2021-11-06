@@ -1,59 +1,31 @@
-package com.example.cstmsndbrd;
+package com.sound.cstmsndbrd;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-import android.text.Editable;
-import android.text.Selection;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.DragEvent;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.loader.content.CursorLoader;
 
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 public class soundCut extends Fragment {

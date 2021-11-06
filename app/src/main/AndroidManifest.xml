@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.cstmsndbrd">
+    package="com.sound.cstmsndbrd">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -15,7 +15,7 @@
         android:theme="@style/Theme.Cstmsndbrd"
         android:requestLegacyExternalStorage="true">
         <activity
-            android:name=".MainActivity"
+            android:name="com.sound.cstmsndbrd.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>

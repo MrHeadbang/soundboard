@@ -1,4 +1,4 @@
-package com.example.cstmsndbrd;
+package com.sound.cstmsndbrd;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,15 +13,11 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Objects;
-import java.util.Random;
 
 public class FileManager {
 

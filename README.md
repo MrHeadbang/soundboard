@@ -2,7 +2,7 @@
 
 <img src="images/icon.png" width=100>
 
-An app to create a custom soundboard very fast and easy.
+An app to create a custom soundboard very fast and easily.
 
 <b>Features</b>
 <ul>
